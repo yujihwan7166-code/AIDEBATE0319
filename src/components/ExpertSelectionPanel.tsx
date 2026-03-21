@@ -1037,19 +1037,16 @@ function ExpertModePanel({ onSelectTemplate, selectedTemplate, onSubmit, isDiscu
               <div className="space-y-1.5">
                 {selectedTemplate.phases.map((phase, i) => {
                   const isLast = i === selectedTemplate.phases.length - 1;
+                  if (isLast) return null;
                   return (
-                    <div key={phase.id} className={cn(
-                      'flex items-start gap-3 px-4 py-2.5 rounded-lg border',
-                      isLast ? 'bg-slate-100 border-slate-300' : 'bg-slate-50/80 border-slate-100 hover:bg-slate-50'
-                    )}>
-                      <div className={cn('w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5',
-                        isLast ? 'bg-slate-800 text-white' : 'bg-white text-slate-600 shadow-sm border border-slate-200')}>
-                        {isLast ? <Check className="w-3 h-3" /> : i + 1}
+                    <div key={phase.id} className="flex items-start gap-3 px-4 py-2.5 rounded-lg border bg-slate-50/80 border-slate-100 hover:bg-slate-50">
+                      <div className="w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5 bg-white text-slate-600 shadow-sm border border-slate-200">
+                        {i + 1}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-1.5">
                           <span className="text-[12px]">{phase.expertIcon}</span>
-                          <span className={cn('text-[11px] font-bold', isLast ? 'text-slate-800' : 'text-slate-800')}>{phase.expertRole}</span>
+                          <span className="text-[11px] font-bold text-slate-800">{phase.expertRole}</span>
                           <span className="text-[9px] text-slate-400">— {phase.description}</span>
                         </div>
                         {phase.sampleQuestions.length > 0 && (
@@ -1063,6 +1060,22 @@ function ExpertModePanel({ onSelectTemplate, selectedTemplate, onSubmit, isDiscu
                     </div>
                   );
                 })}
+                {/* Final step — separate summary bar */}
+                {(() => {
+                  const lastPhase = selectedTemplate.phases[selectedTemplate.phases.length - 1];
+                  return (
+                    <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-slate-800 mt-1">
+                      <div className="w-6 h-6 rounded bg-white/20 flex items-center justify-center shrink-0">
+                        <Check className="w-3.5 h-3.5 text-white" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <span className="text-[11px] font-bold text-white">{lastPhase.expertRole}</span>
+                        <span className="text-[9px] text-slate-400 ml-2">{lastPhase.description}</span>
+                      </div>
+                      <span className="text-[9px] text-slate-400 shrink-0">{selectedTemplate.outputFormat}</span>
+                    </div>
+                  );
+                })()}
               </div>
             </div>
 
