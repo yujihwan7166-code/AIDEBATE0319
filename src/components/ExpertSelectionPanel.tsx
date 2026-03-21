@@ -980,20 +980,24 @@ function ExpertModePanel({ onSelectTemplate, selectedTemplate, onSubmit, isDiscu
 
           {/* Modal */}
           <div ref={modalRef} className="relative w-full max-w-2xl max-h-[85vh] bg-white rounded-2xl shadow-2xl overflow-y-auto scrollbar-thin animate-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
-            {/* Header — gradient accent, centered */}
-            <div className={cn('px-8 pt-7 pb-5 relative text-center', `bg-gradient-to-r ${selectedTemplate.gradient}`)}>
+            {/* Header — compact, centered */}
+            <div className={cn('px-6 pt-5 pb-4 relative text-center', `bg-gradient-to-r ${selectedTemplate.gradient}`)}>
               <button onClick={() => onSelectTemplate(null)}
-                className="absolute top-4 right-4 w-8 h-8 rounded-lg bg-white/70 hover:bg-white flex items-center justify-center transition-colors shadow-sm">
-                <X className="w-4 h-4 text-slate-500" />
+                className="absolute top-3 right-3 w-7 h-7 rounded-lg bg-white/70 hover:bg-white flex items-center justify-center transition-colors shadow-sm">
+                <X className="w-3.5 h-3.5 text-slate-500" />
               </button>
-              <div className="w-14 h-14 rounded-xl bg-white flex items-center justify-center text-3xl shadow-sm mx-auto mb-3">
-                {selectedTemplate.icon}
+              <div className="flex items-center justify-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center text-xl shadow-sm shrink-0">
+                  {selectedTemplate.icon}
+                </div>
+                <div className="text-left">
+                  <h3 className="text-[16px] font-bold text-slate-900 tracking-tight">{selectedTemplate.name}</h3>
+                  <p className="text-[11px] text-slate-600">{selectedTemplate.description}</p>
+                </div>
               </div>
-              <h3 className="text-[20px] font-bold text-slate-900 tracking-tight">{selectedTemplate.name}</h3>
-              <p className="text-[12px] text-slate-700 mt-1">{selectedTemplate.description}</p>
-              <div className="flex items-center justify-center gap-3 mt-3">
-                <span className="text-[10px] font-semibold text-slate-600 bg-white/80 px-2.5 py-1 rounded-md shadow-sm">{selectedTemplate.phases.length}단계 순차 상담</span>
-                <span className="text-[10px] text-slate-500 flex items-center gap-1"><FileText className="w-3 h-3" />{selectedTemplate.outputFormat}</span>
+              <div className="flex items-center justify-center gap-2 mt-2.5">
+                <span className="text-[9px] font-semibold text-slate-600 bg-white/80 px-2 py-0.5 rounded shadow-sm">{selectedTemplate.phases.length}단계</span>
+                <span className="text-[9px] text-slate-500 flex items-center gap-1"><FileText className="w-2.5 h-2.5" />{selectedTemplate.outputFormat}</span>
               </div>
             </div>
 
