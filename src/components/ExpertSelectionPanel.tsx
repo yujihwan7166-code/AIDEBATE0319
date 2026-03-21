@@ -186,9 +186,9 @@ function StandardSettingsPanel({ issues, onIssuesChange, debateSettings, onDebat
               {selectedExperts.map(e => (
                 <button key={e.id} type="button" onClick={() => onToggle(e.id)}
                   className="inline-flex items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-full bg-slate-100 border border-slate-200 hover:bg-red-50 hover:border-red-200 transition-colors group cursor-pointer">
-                  <ExpertAvatar expert={e} size="sm" />
-                  <span className="text-[11px] font-medium text-slate-700 group-hover:text-red-500">{e.nameKo}</span>
-                  <X className="w-3 h-3 text-slate-300 group-hover:text-red-400" />
+                  <div className="pointer-events-none"><ExpertAvatar expert={e} size="sm" /></div>
+                  <span className="text-[11px] font-medium text-slate-700 group-hover:text-red-500 pointer-events-none">{e.nameKo}</span>
+                  <X className="w-3 h-3 text-slate-300 group-hover:text-red-400 pointer-events-none" />
                 </button>
               ))}
             </div>
@@ -528,9 +528,9 @@ function BrainstormSettingsPanel({ selectedIds, experts, selectedFramework, onFr
                 return e ? (
                   <button key={id} type="button" onClick={() => onToggle(id)}
                     className="inline-flex items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-full bg-slate-100 border border-slate-200 hover:bg-red-50 hover:border-red-200 transition-colors group cursor-pointer">
-                    <ExpertAvatar expert={e} size="sm" />
-                    <span className="text-[11px] font-medium text-slate-700 group-hover:text-red-500">{e.nameKo}</span>
-                    <X className="w-3 h-3 text-slate-300 group-hover:text-red-400" />
+                    <div className="pointer-events-none"><ExpertAvatar expert={e} size="sm" /></div>
+                    <span className="text-[11px] font-medium text-slate-700 group-hover:text-red-500 pointer-events-none">{e.nameKo}</span>
+                    <X className="w-3 h-3 text-slate-300 group-hover:text-red-400 pointer-events-none" />
                   </button>
                 ) : null;
               })}
@@ -698,9 +698,9 @@ function HearingSettingsPanel({ experts, selectedIds, debateSettings, onDebateSe
               {selected.map(e => (
                 <button key={e.id} type="button" onClick={() => onToggle(e.id)}
                   className="inline-flex items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-full bg-slate-100 border border-slate-200 hover:bg-red-50 hover:border-red-200 transition-colors group cursor-pointer">
-                  <ExpertAvatar expert={e} size="sm" />
-                  <span className="text-[11px] font-medium text-slate-700 group-hover:text-red-500">{e.nameKo}</span>
-                  <X className="w-3 h-3 text-slate-300 group-hover:text-red-400" />
+                  <div className="pointer-events-none"><ExpertAvatar expert={e} size="sm" /></div>
+                  <span className="text-[11px] font-medium text-slate-700 group-hover:text-red-500 pointer-events-none">{e.nameKo}</span>
+                  <X className="w-3 h-3 text-slate-300 group-hover:text-red-400 pointer-events-none" />
                 </button>
               ))}
             </div>
