@@ -1028,8 +1028,8 @@ function ExpertModePanel({ onSelectTemplate, selectedTemplate, onSubmit, isDiscu
             </div>
 
             {/* ── Process: full-width card rows ── */}
-            <div className="px-3 pt-5 pb-3">
-              <div className="flex items-center gap-2 mb-3 px-2">
+            <div className="px-5 pt-5 pb-3">
+              <div className="flex items-center gap-2 mb-3">
                 <div className="h-px flex-1 bg-slate-200" />
                 <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest px-2">상담 프로세스</span>
                 <div className="h-px flex-1 bg-slate-200" />
@@ -1092,7 +1092,7 @@ function ExpertModePanel({ onSelectTemplate, selectedTemplate, onSubmit, isDiscu
                   };
                   const groups = deliverables[selectedTemplate.id] || [{ category: '결과', items: [lastPhase.description] }];
                   return (
-                    <div className="mt-3 mx-6 rounded-lg border border-slate-200 overflow-hidden">
+                    <div className="mt-3 rounded-lg border border-slate-200 overflow-hidden">
                       <div className="flex items-center gap-2.5 px-4 py-2 bg-slate-800">
                         <div className="w-5 h-5 rounded bg-white/20 flex items-center justify-center shrink-0">
                           <Check className="w-3 h-3 text-white" />
