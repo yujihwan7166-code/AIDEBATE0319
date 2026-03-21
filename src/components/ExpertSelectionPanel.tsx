@@ -997,33 +997,29 @@ function ExpertModePanel({ onSelectTemplate, selectedTemplate, onSubmit, isDiscu
               </div>
             </div>
 
-            {/* Phase timeline — centered */}
-            <div className="px-8 py-6">
-              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-5 text-center">상담 프로세스</p>
-              <div className="max-w-md mx-auto space-y-0">
+            {/* Phase timeline — card style, centered */}
+            <div className="px-6 py-6">
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-4 text-center">상담 프로세스</p>
+              <div className="space-y-2">
                 {selectedTemplate.phases.map((phase, i) => {
                   const isLast = i === selectedTemplate.phases.length - 1;
                   return (
-                    <div key={phase.id} className="flex gap-3">
-                      {/* Timeline */}
-                      <div className="flex flex-col items-center shrink-0">
-                        <div className={cn('w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold shadow-sm',
-                          isLast ? 'bg-slate-900 text-white' : 'bg-white text-slate-600 border border-slate-200')}>
-                          {isLast ? <Check className="w-3.5 h-3.5" /> : i + 1}
-                        </div>
-                        {!isLast && <div className="w-px flex-1 bg-slate-200 my-1" />}
+                    <div key={phase.id} className={cn('flex items-start gap-3 px-4 py-3 rounded-xl border transition-all',
+                      isLast ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200')}>
+                      <div className={cn('w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold shrink-0 mt-0.5',
+                        isLast ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600')}>
+                        {isLast ? <Check className="w-3.5 h-3.5" /> : i + 1}
                       </div>
-                      {/* Content */}
-                      <div className="pb-4 flex-1 min-w-0">
+                      <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-1.5">
-                          <span className="text-[14px]">{phase.expertIcon}</span>
-                          <span className={cn('text-[12px] font-bold', isLast ? 'text-slate-900' : 'text-slate-700')}>{phase.expertRole}</span>
+                          <span className="text-[13px]">{phase.expertIcon}</span>
+                          <span className={cn('text-[12px] font-bold', isLast ? 'text-white' : 'text-slate-800')}>{phase.expertRole}</span>
                         </div>
-                        <p className="text-[10px] text-slate-500 mt-0.5">{phase.description}</p>
+                        <p className={cn('text-[10px] mt-0.5', isLast ? 'text-slate-400' : 'text-slate-500')}>{phase.description}</p>
                         {phase.sampleQuestions.length > 0 && (
-                          <div className="mt-2 space-y-1">
+                          <div className="mt-2 flex flex-wrap gap-1.5">
                             {phase.sampleQuestions.map((q, qi) => (
-                              <p key={qi} className="text-[10px] text-slate-500 pl-3 border-l-2 border-slate-300 leading-relaxed">{q}</p>
+                              <span key={qi} className="text-[9px] text-slate-400 bg-slate-50 border border-slate-100 px-2 py-0.5 rounded-md">{q}</span>
                             ))}
                           </div>
                         )}
