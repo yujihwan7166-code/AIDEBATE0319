@@ -942,7 +942,7 @@ function ExpertModePanel({ onSelectTemplate, selectedTemplate, onSubmit, isDiscu
         <p className="text-[12px] text-slate-500">분야를 선택하면 전문가들이 단계별로 상담을 진행합니다</p>
       </div>
 
-      {/* Mode cards grid — 3 per row, information-rich */}
+      {/* Mode cards grid — 3 per row, professional */}
       <div className="grid grid-cols-3 gap-3">
         {EXPERT_MODE_TEMPLATES.map(template => {
           const isSelected = selectedTemplate?.id === template.id;
@@ -952,64 +952,41 @@ function ExpertModePanel({ onSelectTemplate, selectedTemplate, onSubmit, isDiscu
               key={template.id}
               onClick={() => onSelectTemplate(isSelected ? null : template)}
               className={cn(
-                'relative text-left rounded-2xl border transition-all duration-200 group overflow-hidden',
+                'relative text-left rounded-xl border transition-all duration-200 group',
                 isSelected
-                  ? 'border-indigo-300 bg-indigo-50 shadow-lg ring-1 ring-indigo-200'
-                  : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-lg'
+                  ? 'border-slate-400 bg-slate-50 shadow-md'
+                  : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-md'
               )}
             >
-              {/* Top gradient accent bar */}
-              <div className={cn('h-1', isSelected ? 'bg-gradient-to-r from-amber-400 to-orange-400' : `bg-gradient-to-r ${template.gradient}`)} />
-
-              <div className="px-4 pt-3.5 pb-3">
+              <div className="px-4 py-3.5">
                 {/* Badges */}
                 <div className="absolute top-3 right-3 flex gap-1">
                   {template.isPopular && (
-                    <span className={cn('text-[8px] font-bold px-1.5 py-0.5 rounded-full', isSelected ? 'bg-amber-400/20 text-amber-300' : 'bg-amber-50 text-amber-600 border border-amber-200')}>인기</span>
+                    <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">인기</span>
                   )}
                   {template.isNew && (
-                    <span className={cn('text-[8px] font-bold px-1.5 py-0.5 rounded-full', isSelected ? 'bg-emerald-400/20 text-emerald-300' : 'bg-emerald-50 text-emerald-600 border border-emerald-200')}>NEW</span>
+                    <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-600">NEW</span>
                   )}
                 </div>
 
-                {/* Header: Icon + Title */}
-                <div className="flex items-start gap-2.5 mb-2.5">
-                  <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center text-xl shrink-0 shadow-sm', `bg-gradient-to-br ${template.gradient}`)}>
-                    {template.icon}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <h3 className={cn('text-[13px] font-bold leading-tight', isSelected ? 'text-indigo-900' : 'text-slate-800')}>{template.name}</h3>
-                    <p className={cn('text-[9px] mt-0.5 leading-snug', isSelected ? 'text-indigo-500' : 'text-slate-500')}>{template.description}</p>
-                  </div>
+                {/* Title */}
+                <h3 className="text-[14px] font-bold text-slate-800 mb-1">{template.icon} {template.name}</h3>
+                <p className="text-[10px] text-slate-500 leading-snug mb-3">{template.description}</p>
+
+                {/* Phase flow — text only, no emoji */}
+                <div className="flex items-center gap-1 flex-wrap mb-3">
+                  {corePhases.map((phase, i) => (
+                    <div key={phase.id} className="flex items-center gap-1">
+                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 font-medium">{phase.expertRole}</span>
+                      {i < corePhases.length - 1 && <ChevronRight className="w-2.5 h-2.5 text-slate-300 shrink-0" />}
+                    </div>
+                  ))}
                 </div>
 
-                {/* Phase flow: expert roles */}
-                <div className={cn('rounded-lg p-2 mb-2.5', isSelected ? 'bg-indigo-100/50' : 'bg-slate-50')}>
-                  <div className="flex items-center gap-0.5 flex-wrap">
-                    {corePhases.map((phase, i) => (
-                      <div key={phase.id} className="flex items-center gap-0.5">
-                        <span className={cn('text-[9px] px-1.5 py-0.5 rounded-md font-medium inline-flex items-center gap-0.5',
-                          isSelected ? 'bg-white text-indigo-700 border border-indigo-200' : 'bg-white text-slate-600 border border-slate-200')}>
-                          <span>{phase.expertIcon}</span>
-                          <span>{phase.expertRole}</span>
-                        </span>
-                        {i < corePhases.length - 1 && <ChevronRight className={cn('w-2.5 h-2.5 shrink-0', isSelected ? 'text-indigo-300' : 'text-slate-300')} />}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Output format */}
-                <div className={cn('flex items-center gap-1.5 text-[9px] font-medium', isSelected ? 'text-indigo-400' : 'text-slate-400')}>
-                  <FileText className="w-3 h-3 shrink-0" />
-                  <span>{template.outputFormat}</span>
-                </div>
-
-                {/* Phase count badge */}
-                <div className={cn('mt-2 pt-2 border-t', isSelected ? 'border-indigo-200' : 'border-slate-100')}>
-                  <span className={cn('text-[9px] font-bold', isSelected ? 'text-indigo-600' : 'text-slate-500')}>
-                    {template.phases.length}단계 전문가 순차 상담
-                  </span>
+                {/* Footer */}
+                <div className="flex items-center justify-between pt-2 border-t border-slate-100">
+                  <span className="text-[9px] font-semibold text-slate-400">{template.phases.length}단계</span>
+                  <span className="text-[9px] text-slate-400 flex items-center gap-1"><FileText className="w-2.5 h-2.5" />{template.outputFormat}</span>
                 </div>
               </div>
             </button>
@@ -1020,54 +997,47 @@ function ExpertModePanel({ onSelectTemplate, selectedTemplate, onSubmit, isDiscu
       {/* Selected template — floating modal */}
       {selectedTemplate && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-150" onClick={() => onSelectTemplate(null)}>
-          {/* Backdrop */}
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
 
-          {/* Modal */}
           <div ref={modalRef} className="relative w-full max-w-lg max-h-[85vh] bg-white rounded-2xl shadow-2xl overflow-y-auto scrollbar-thin animate-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
-            {/* Header */}
-            <div className={cn('px-6 py-5 bg-gradient-to-r relative', selectedTemplate.gradient)}>
+            {/* Header — clean, no gradient */}
+            <div className="px-6 py-5 border-b border-slate-100 relative">
               <button onClick={() => onSelectTemplate(null)}
-                className="absolute top-4 right-4 w-7 h-7 rounded-full bg-black/10 hover:bg-black/20 flex items-center justify-center transition-colors">
-                <X className="w-4 h-4 text-slate-700" />
+                className="absolute top-4 right-4 w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-colors">
+                <X className="w-4 h-4 text-slate-500" />
               </button>
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-white/80 flex items-center justify-center text-3xl shadow-sm shrink-0">
-                  {selectedTemplate.icon}
-                </div>
-                <div>
-                  <h3 className="text-[16px] font-bold text-slate-800">{selectedTemplate.name}</h3>
-                  <p className="text-[12px] text-slate-600 mt-0.5">{selectedTemplate.description}</p>
-                  <div className="flex items-center gap-2 mt-1.5">
-                    <span className="text-[10px] font-semibold text-slate-500 bg-white/60 px-2 py-0.5 rounded-full">{selectedTemplate.phases.length}단계</span>
-                    <span className="text-[10px] font-medium text-slate-500 flex items-center gap-1"><FileText className="w-3 h-3" />{selectedTemplate.outputFormat}</span>
-                  </div>
-                </div>
+              <h3 className="text-[18px] font-bold text-slate-900">{selectedTemplate.icon} {selectedTemplate.name}</h3>
+              <p className="text-[12px] text-slate-500 mt-1">{selectedTemplate.description}</p>
+              <div className="flex items-center gap-3 mt-2.5">
+                <span className="text-[10px] font-semibold text-slate-500 bg-slate-100 px-2.5 py-1 rounded">{selectedTemplate.phases.length}단계 순차 상담</span>
+                <span className="text-[10px] text-slate-400 flex items-center gap-1"><FileText className="w-3 h-3" />{selectedTemplate.outputFormat}</span>
               </div>
             </div>
 
-            {/* Phase timeline */}
+            {/* Phase timeline — minimal, structured */}
             <div className="px-6 py-5">
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-4">상담 진행 순서</p>
-              <div className="grid grid-cols-1 gap-3">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-4">상담 프로세스</p>
+              <div className="space-y-0">
                 {selectedTemplate.phases.map((phase, i) => {
                   const isLast = i === selectedTemplate.phases.length - 1;
                   return (
-                    <div key={phase.id} className={cn('flex items-start gap-3 p-3 rounded-xl border', isLast ? 'bg-amber-50/50 border-amber-200' : 'bg-slate-50/50 border-slate-100')}>
-                      <div className={cn('w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0',
-                        isLast ? 'bg-amber-200 text-amber-700' : 'bg-slate-200 text-slate-600')}>
-                        {isLast ? '✓' : i + 1}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-[14px]">{phase.expertIcon}</span>
-                          <span className={cn('text-[12px] font-semibold', isLast ? 'text-amber-700' : 'text-slate-700')}>{phase.expertRole}</span>
+                    <div key={phase.id} className="flex gap-4">
+                      {/* Timeline line */}
+                      <div className="flex flex-col items-center shrink-0">
+                        <div className={cn('w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold',
+                          isLast ? 'bg-slate-800 text-white' : 'bg-slate-200 text-slate-600')}>
+                          {isLast ? '✓' : i + 1}
                         </div>
-                        <p className="text-[11px] text-slate-500 mt-0.5">{phase.description}</p>
+                        {!isLast && <div className="w-px h-full bg-slate-200 my-1" />}
+                      </div>
+                      {/* Content */}
+                      <div className="pb-4 flex-1 min-w-0">
+                        <p className={cn('text-[12px] font-semibold', isLast ? 'text-slate-800' : 'text-slate-700')}>{phase.expertRole}</p>
+                        <p className="text-[10px] text-slate-400 mt-0.5">{phase.description}</p>
                         {phase.sampleQuestions.length > 0 && (
-                          <div className="mt-1.5 flex flex-wrap gap-1">
+                          <div className="mt-2 space-y-1">
                             {phase.sampleQuestions.map((q, qi) => (
-                              <span key={qi} className="text-[9px] text-slate-400 bg-white border border-slate-200 px-2 py-0.5 rounded-full">&ldquo;{q}&rdquo;</span>
+                              <p key={qi} className="text-[10px] text-slate-400 pl-2.5 border-l-2 border-slate-200">{q}</p>
                             ))}
                           </div>
                         )}
