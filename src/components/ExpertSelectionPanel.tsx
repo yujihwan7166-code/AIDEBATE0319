@@ -11,7 +11,7 @@ import { QuestionInput } from './QuestionInput';
 import { cn } from '@/lib/utils';
 import {
   Brain, TrendingUp, Sparkles, HelpCircle, Target, Scale, Lightbulb,
-  Users, Plus, X, Pencil, Check, ChevronRight, ArrowRight, Star, Zap,
+  Users, Plus, X, Pencil, Check, ChevronRight, ChevronDown, ArrowRight, Star, Zap,
   Clock, FileText, BookOpen, Presentation, Globe, Code, BarChart3,
   PenTool, Search, Filter, Sliders, ToggleLeft, ToggleRight,
 } from 'lucide-react';
@@ -1007,52 +1007,67 @@ function ExpertModePanel({ onSelectTemplate, selectedTemplate, onSubmit, isDiscu
           <div ref={modalRef} className="relative w-full max-w-[640px] max-h-[88vh] bg-white rounded-2xl shadow-2xl overflow-y-auto scrollbar-thin animate-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
 
             {/* ── Header ── */}
-            <div className={cn('relative px-6 py-4', `bg-gradient-to-br ${selectedTemplate.gradient}`)}>
+            <div className={cn('relative px-6 py-2.5', `bg-gradient-to-br ${selectedTemplate.gradient}`)}>
               <button onClick={() => onSelectTemplate(null)}
-                className="absolute top-3 right-3 w-7 h-7 rounded-full bg-white/60 hover:bg-white flex items-center justify-center transition-colors">
-                <X className="w-3.5 h-3.5 text-slate-600" />
+                className="absolute top-2 right-2.5 w-6 h-6 rounded-full bg-white/60 hover:bg-white flex items-center justify-center transition-colors">
+                <X className="w-3 h-3 text-slate-600" />
               </button>
-              <div className="flex items-start gap-3.5">
-                <div className="w-11 h-11 rounded-xl bg-white shadow flex items-center justify-center text-[22px] shrink-0 mt-0.5">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-white shadow flex items-center justify-center text-[18px] shrink-0">
                   {selectedTemplate.icon}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-[16px] font-bold text-slate-900">{selectedTemplate.name}</h3>
-                  <p className="text-[11px] text-slate-600 mt-0.5 leading-snug">{selectedTemplate.description}</p>
-                  <div className="flex items-center gap-2 mt-1.5">
-                    <span className="text-[9px] font-bold text-slate-600 bg-white/70 px-2 py-0.5 rounded shadow-sm">{selectedTemplate.phases.length}단계</span>
-                    <span className="text-[9px] text-slate-500 flex items-center gap-1"><FileText className="w-2.5 h-2.5" />{selectedTemplate.outputFormat}</span>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-[15px] font-bold text-slate-900">{selectedTemplate.name}</h3>
+                    <span className="text-[8px] font-bold text-slate-500 bg-white/70 px-1.5 py-0.5 rounded">{selectedTemplate.phases.length}단계</span>
                   </div>
+                  <p className="text-[10px] text-slate-600 leading-snug">{selectedTemplate.description}</p>
                 </div>
               </div>
             </div>
 
+            {/* Connector: header → process */}
+            <div className="flex items-center gap-2 pt-5 pb-3 px-8 animate-in fade-in slide-in-from-bottom-2 duration-500" style={{ animationDelay: '200ms', animationFillMode: 'both' }}>
+              <div className="h-px flex-1 bg-slate-200" />
+              <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+              <span className="text-[11px] font-semibold text-slate-600">전문가들이 단계별로 질문하고 분석합니다</span>
+              <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+              <div className="h-px flex-1 bg-slate-200" />
+            </div>
+
             {/* ── Process: full-width card rows ── */}
-            <div className="px-8 pt-5 pb-3">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="h-px flex-1 bg-slate-200" />
-                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest px-2">상담 프로세스</span>
-                <div className="h-px flex-1 bg-slate-200" />
-              </div>
+            {(() => {
+              const procColors: Record<string, { accent: string; numBg: string; numText: string }> = {
+                medical: { accent: 'from-red-500 to-rose-500', numBg: 'bg-red-500', numText: 'text-white' },
+                legal: { accent: 'from-amber-500 to-yellow-500', numBg: 'bg-amber-500', numText: 'text-white' },
+                finance: { accent: 'from-emerald-500 to-green-500', numBg: 'bg-emerald-500', numText: 'text-white' },
+                realestate: { accent: 'from-blue-500 to-sky-500', numBg: 'bg-blue-500', numText: 'text-white' },
+                startup: { accent: 'from-purple-500 to-violet-500', numBg: 'bg-purple-500', numText: 'text-white' },
+              };
+              const pc = procColors[selectedTemplate.id] || procColors.medical;
+              return (
+            <div className="px-8 pt-1 pb-3">
               <div className="space-y-1.5">
                 {selectedTemplate.phases.map((phase, i) => {
                   const isLast = i === selectedTemplate.phases.length - 1;
                   if (isLast) return null;
                   return (
-                    <div key={phase.id} className="flex items-start gap-3 px-4 py-2.5 rounded-lg border bg-slate-50/80 border-slate-100 hover:bg-slate-50">
-                      <div className="w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5 bg-white text-slate-600 shadow-sm border border-slate-200">
+                    <div key={phase.id}
+                      className="flex items-start gap-3 px-4 py-2.5 rounded-lg border border-slate-100 bg-slate-50/80 hover:bg-slate-50 animate-in fade-in slide-in-from-bottom-2 duration-400"
+                      style={{ animationDelay: `${800 + i * 150}ms`, animationFillMode: 'both' }}>
+                      <div className={cn('w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5', pc.numBg, pc.numText)}>
                         {i + 1}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-1.5">
                           <span className="text-[12px]">{phase.expertIcon}</span>
                           <span className="text-[11px] font-bold text-slate-800">{phase.expertRole}</span>
-                          <span className="text-[9px] text-slate-400">— {phase.description}</span>
+                          <span className="text-[9px] text-slate-500">— {phase.description}</span>
                         </div>
                         {phase.sampleQuestions.length > 0 && (
                           <div className="mt-1.5 flex flex-wrap gap-1">
                             {phase.sampleQuestions.map((q, qi) => (
-                              <span key={qi} className="text-[9px] px-2 py-0.5 rounded text-slate-500 bg-white border border-slate-200">{q}</span>
+                              <span key={qi} className="text-[9px] px-2 py-0.5 rounded text-slate-600 bg-white border border-slate-200">{q}</span>
                             ))}
                           </div>
                         )}
@@ -1060,72 +1075,96 @@ function ExpertModePanel({ onSelectTemplate, selectedTemplate, onSubmit, isDiscu
                     </div>
                   );
                 })}
-                {/* Final step — deliverable card */}
+              </div>
+              {/* Connector */}
+              <div className="flex items-center gap-2 py-5 animate-in fade-in slide-in-from-bottom-2 duration-500"
+                style={{ animationDelay: `${800 + selectedTemplate.phases.length * 150 + 400}ms`, animationFillMode: 'both' }}>
+                <div className="h-px flex-1 bg-slate-200" />
+                <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+                <span className="text-[11px] font-semibold text-slate-600">상담 완료 시 {selectedTemplate.outputFormat} 제공</span>
+                <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+                <div className="h-px flex-1 bg-slate-200" />
+              </div>
+              {/* Final step — premium deliverable card */}
                 {(() => {
                   const lastPhase = selectedTemplate.phases[selectedTemplate.phases.length - 1];
-                  const deliverables: Record<string, { category: string; items: string[] }[]> = {
+                  const colorMap: Record<string, { accent: string; bg: string; text: string; icon: string }> = {
+                    medical: { accent: 'from-red-500 to-rose-500', bg: 'bg-red-50', text: 'text-red-700', icon: 'text-red-500' },
+                    legal: { accent: 'from-amber-500 to-yellow-500', bg: 'bg-amber-50', text: 'text-amber-700', icon: 'text-amber-500' },
+                    finance: { accent: 'from-emerald-500 to-green-500', bg: 'bg-emerald-50', text: 'text-emerald-700', icon: 'text-emerald-500' },
+                    realestate: { accent: 'from-blue-500 to-sky-500', bg: 'bg-blue-50', text: 'text-blue-700', icon: 'text-blue-500' },
+                    startup: { accent: 'from-purple-500 to-violet-500', bg: 'bg-purple-50', text: 'text-purple-700', icon: 'text-purple-500' },
+                  };
+                  const deliverables: Record<string, { icon: string; label: string }[]> = {
                     medical: [
-                      { category: '진단', items: ['감별진단 목록 (가능성 높은 순)', '추가 필요 검사 항목 및 이유'] },
-                      { category: '처방', items: ['생활습관 교정 가이드', '식이·운동·수면 개선안'] },
-                      { category: '보고서', items: ['SOAP Note 형식 종합 소견서', '추적 관찰 일정 권고'] },
+                      { icon: '🔍', label: '감별진단 목록' }, { icon: '🧪', label: '권장 검사 항목' },
+                      { icon: '💪', label: '생활습관 교정' }, { icon: '📋', label: 'SOAP Note 작성' },
+                      { icon: '📅', label: '추적 관찰 일정' }, { icon: '🏥', label: '전문의 연계 권고' },
                     ],
                     legal: [
-                      { category: '분석', items: ['법률 쟁점 요약', '적용 법조문 및 관련 판례'] },
-                      { category: '전략', items: ['소송/조정/합의 시나리오 비교', '예상 비용 및 소요 기간'] },
-                      { category: '보고서', items: ['법률의견서 (Legal Memo)', '즉시 조치 사항 체크리스트'] },
+                      { icon: '📜', label: '법률의견서 작성' }, { icon: '⚖️', label: '쟁점별 판례 분석' },
+                      { icon: '📊', label: '승소 가능성 평가' }, { icon: '🎯', label: '소송 전략 권고' },
+                      { icon: '💰', label: '예상 비용·기간' }, { icon: '✅', label: '즉시 조치 체크리스트' },
                     ],
                     finance: [
-                      { category: '진단', items: ['재무 건강 점수 (100점 만점)', '소득/지출/부채 구조 분석'] },
-                      { category: '설계', items: ['맞춤 자산 배분 포트폴리오', '절세 전략 시뮬레이션'] },
-                      { category: '보고서', items: ['개인재무보고서', '90일 실행 액션플랜'] },
+                      { icon: '💯', label: '재무 건강 점수' }, { icon: '📊', label: '자산 배분 설계' },
+                      { icon: '🧾', label: '절세 전략' }, { icon: '📈', label: '투자 포트폴리오' },
+                      { icon: '📋', label: '개인재무보고서' }, { icon: '🗓️', label: '90일 액션플랜' },
                     ],
                     realestate: [
-                      { category: '분석', items: ['시세 동향 및 전망 리포트', '입지/인프라 평가'] },
-                      { category: '시뮬레이션', items: ['취득세·양도세·보유세 계산', '투자 수익률 시나리오'] },
-                      { category: '보고서', items: ['매수/매도/보류 판정', '리스크 체크리스트'] },
+                      { icon: '📊', label: '시세 분석 리포트' }, { icon: '🧾', label: '세금 시뮬레이션' },
+                      { icon: '⚠️', label: '리스크 체크' }, { icon: '📈', label: '수익률 분석' },
+                      { icon: '🏠', label: '매수/매도 판정' }, { icon: '✅', label: '실행 체크리스트' },
                     ],
                     startup: [
-                      { category: '검증', items: ['Lean Canvas 완성본', 'TAM/SAM/SOM 시장 규모'] },
-                      { category: '설계', items: ['수익 모델 및 단가 구조', '번레이트 · 손익분기점 분석'] },
-                      { category: '보고서', items: ['IR Pitch Deck 구조', '90일 실행 로드맵'] },
+                      { icon: '📐', label: 'Lean Canvas' }, { icon: '🔎', label: '시장 규모 분석' },
+                      { icon: '💼', label: '재무 모델링' }, { icon: '📊', label: 'IR Pitch Deck' },
+                      { icon: '🗓️', label: '90일 로드맵' }, { icon: '📈', label: 'KPI 대시보드' },
                     ],
                   };
-                  const groups = deliverables[selectedTemplate.id] || [{ category: '결과', items: [lastPhase.description] }];
+                  const colors = colorMap[selectedTemplate.id] || colorMap.medical;
+                  const items = deliverables[selectedTemplate.id] || [{ icon: '📋', label: lastPhase.description }];
                   return (
-                    <div className="mt-3 rounded-lg border border-slate-200 overflow-hidden">
-                      <div className="flex items-center gap-2.5 px-4 py-2 bg-slate-800">
-                        <div className="w-5 h-5 rounded bg-white/20 flex items-center justify-center shrink-0">
-                          <Check className="w-3 h-3 text-white" />
+                    <div className="rounded-xl overflow-hidden border border-slate-200 shadow-sm animate-in fade-in slide-in-from-bottom-3 duration-500"
+                      style={{ animationDelay: `${800 + selectedTemplate.phases.length * 150 + 900}ms`, animationFillMode: 'both' }}>
+                      {/* Gradient accent top */}
+                      <div className={cn('h-1 bg-gradient-to-r', colors.accent)} />
+                      {/* Header */}
+                      <div className="flex items-center gap-3 px-5 py-3 bg-white border-b border-slate-100">
+                        <div className={cn('w-8 h-8 rounded-lg flex items-center justify-center shrink-0', colors.bg)}>
+                          <FileText className={cn('w-4 h-4', colors.icon)} />
                         </div>
-                        <span className="text-[11px] font-bold text-white">{selectedTemplate.outputFormat}</span>
+                        <div>
+                          <p className="text-[13px] font-bold text-slate-900">{selectedTemplate.outputFormat}</p>
+                          <p className="text-[9px] text-slate-500">최종 리포트에 포함되는 항목</p>
+                        </div>
                       </div>
-                      <div className="grid grid-cols-3 divide-x divide-slate-100">
-                        {groups.map((group, gi) => (
-                          <div key={gi} className="px-3 py-2.5">
-                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">{group.category}</p>
-                            <div className="space-y-1">
-                              {group.items.map((item, ii) => (
-                                <div key={ii} className="flex items-start gap-1.5">
-                                  <Check className="w-3 h-3 text-emerald-500 shrink-0 mt-px" />
-                                  <span className="text-[10px] text-slate-600 leading-snug">{item}</span>
-                                </div>
-                              ))}
-                            </div>
+                      {/* Items grid */}
+                      <div className="grid grid-cols-3 gap-0">
+                        {items.map((item, ii) => (
+                          <div key={ii} className={cn('flex items-center gap-2 px-4 py-2.5 border-b border-r border-slate-50',
+                            ii % 3 === 2 && 'border-r-0')}>
+                            <span className="text-[12px]">{item.icon}</span>
+                            <span className="text-[10px] font-medium text-slate-700">{item.label}</span>
                           </div>
                         ))}
                       </div>
                     </div>
                   );
                 })()}
-              </div>
             </div>
+              );
+            })()}
 
             {/* ── Scenario cards + Input ── */}
-            <div className="px-5 pb-5 pt-4">
+            <div className="px-5 pb-5 pt-0 animate-in fade-in slide-in-from-bottom-2 duration-500"
+              style={{ animationDelay: `${800 + selectedTemplate.phases.length * 150 + 1400}ms`, animationFillMode: 'both' }}>
               {/* Section label */}
-              <div className="flex items-center gap-2 mb-3">
+              <div className="flex items-center gap-2 py-5 mb-0">
                 <div className="h-px flex-1 bg-slate-200" />
-                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest px-2">예시 질문</span>
+                <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+                <span className="text-[11px] font-semibold text-slate-600">예시 질문</span>
+                <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
                 <div className="h-px flex-1 bg-slate-200" />
               </div>
               {/* Scenario example cards — 2x2 grid */}
@@ -1168,11 +1207,8 @@ function ExpertModePanel({ onSelectTemplate, selectedTemplate, onSubmit, isDiscu
                     {items.map((ex, i) => (
                       <button key={i} type="button" onClick={() => setQuestion(ex.preview)}
                         className="text-left p-3.5 rounded-xl border border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm transition-all group">
-                        <div className="flex items-center gap-1.5 mb-1">
-                          <Zap className="w-3 h-3 text-slate-300 group-hover:text-slate-500 transition-colors shrink-0" />
-                          <span className="text-[11px] font-bold text-slate-700">{ex.title}</span>
-                        </div>
-                        <p className="text-[10px] text-slate-400 leading-relaxed line-clamp-2">{ex.preview}</p>
+                        <p className="text-[11px] font-bold text-slate-700 mb-1">{ex.title}</p>
+                        <p className="text-[10px] text-slate-500 leading-relaxed line-clamp-2">{ex.preview}</p>
                       </button>
                     ))}
                   </div>
