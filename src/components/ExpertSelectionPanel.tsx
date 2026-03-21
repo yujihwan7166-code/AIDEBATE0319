@@ -1345,7 +1345,11 @@ export function ExpertSelectionPanel({
   })).filter(g => g.items.length > 0);
 
   const validCats = grouped.map(g => g.cat);
-  const effectiveCategory = validCats.includes(activeCategory as ExpertCategory) ? activeCategory : validCats[0] || 'ai';
+  // 심층/찬반 모드에서 AI 탭 선택되어 있으면 전문가 탭으로 자동 전환
+  const aiBlocked = isStandardOrProcon && activeCategory === 'ai';
+  const effectiveCategory = aiBlocked
+    ? (validCats.find(c => c === 'specialist') || validCats.find(c => c !== 'ai') || validCats[0] || 'ai')
+    : (validCats.includes(activeCategory as ExpertCategory) ? activeCategory : validCats[0] || 'ai');
 
   const handleMainModeChange = (m: MainMode) => {
     if (m === 'general') onModeChange('general');
@@ -1469,18 +1473,32 @@ export function ExpertSelectionPanel({
       )}
 
       {/* ── Expert Selection Grid (general / multi / debate) ── */}
-      {showExpertGrid && !autoAssign && (
-        <div className="border border-slate-200 rounded-xl bg-white overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.07)]">
+      {showExpertGrid && (
+        <div className={cn('border border-slate-200 rounded-xl bg-white overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.07)] transition-all duration-200',
+          autoAssign && 'opacity-50'
+        )}
+          onClick={() => { if (autoAssign) setAutoAssign(false); }}
+        >
+          {/* Auto-assign overlay hint */}
+          {autoAssign && (
+            <div className="px-4 py-2 bg-slate-50 border-b border-slate-200 text-center">
+              <p className="text-[10px] text-slate-400">자동 배정 모드 — 클릭하면 직접 선택으로 전환</p>
+            </div>
+          )}
           {/* Category tabs */}
           <div className="flex flex-col bg-slate-50 border-b-2 border-slate-200">
             <div className="flex items-center px-2 pt-1 pb-1 overflow-x-auto scrollbar-none">
               <div className="flex flex-1 min-w-0 gap-0.5">
                 {grouped.map(({ cat, label }) => {
                   const isActive = effectiveCategory === cat;
+                  const isAiTab = cat === 'ai';
+                  const isAiDisabled = isAiTab && isStandardOrProcon;
                   return (
                     <button key={cat} type="button"
-                      onClick={() => { setActiveCategory(cat); setActiveSubCategory('전체'); }}
+                      disabled={isAiDisabled || autoAssign}
+                      onClick={() => { if (!isAiDisabled) { setActiveCategory(cat); setActiveSubCategory('전체'); } }}
                       className={cn('flex items-center gap-1 px-2.5 py-1 text-[11px] transition-all whitespace-nowrap rounded-md',
+                        isAiDisabled ? 'text-slate-300 cursor-not-allowed' :
                         isActive ? 'bg-slate-800 text-white font-semibold shadow-sm' : 'text-slate-500 font-medium hover:text-slate-800 hover:bg-slate-200/70')}>
                       {label}
                     </button>
