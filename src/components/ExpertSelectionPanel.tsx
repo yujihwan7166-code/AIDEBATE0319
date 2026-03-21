@@ -1479,12 +1479,6 @@ export function ExpertSelectionPanel({
         )}
           onClick={() => { if (autoAssign) setAutoAssign(false); }}
         >
-          {/* Auto-assign overlay hint */}
-          {autoAssign && (
-            <div className="px-4 py-2 bg-slate-50 border-b border-slate-200 text-center">
-              <p className="text-[10px] text-slate-400">자동 배정 모드 — 클릭하면 직접 선택으로 전환</p>
-            </div>
-          )}
           {/* Category tabs */}
           <div className="flex flex-col bg-slate-50 border-b-2 border-slate-200">
             <div className="flex items-center px-2 pt-1 pb-1 overflow-x-auto scrollbar-none">
