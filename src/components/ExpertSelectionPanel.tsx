@@ -942,7 +942,7 @@ function ExpertModePanel({ onSelectTemplate, selectedTemplate, onSubmit, isDiscu
         <p className="text-[12px] text-slate-500">분야를 선택하면 전문가들이 단계별로 상담을 진행합니다</p>
       </div>
 
-      {/* Mode cards grid — 3 per row, professional */}
+      {/* Mode cards grid — 3 per row, professional with visual accents */}
       <div className="grid grid-cols-3 gap-3">
         {EXPERT_MODE_TEMPLATES.map(template => {
           const isSelected = selectedTemplate?.id === template.id;
@@ -952,32 +952,37 @@ function ExpertModePanel({ onSelectTemplate, selectedTemplate, onSubmit, isDiscu
               key={template.id}
               onClick={() => onSelectTemplate(isSelected ? null : template)}
               className={cn(
-                'relative text-left rounded-xl border transition-all duration-200 group',
+                'relative text-left rounded-xl border transition-all duration-200 group overflow-hidden',
                 isSelected
                   ? 'border-slate-400 bg-slate-50 shadow-md'
                   : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-md'
               )}
             >
-              <div className="px-4 py-3.5">
+              {/* Left accent bar */}
+              <div className={cn('absolute left-0 top-0 bottom-0 w-1 rounded-l-xl', `bg-gradient-to-b ${template.gradient}`)} />
+
+              <div className="pl-5 pr-4 py-3.5">
                 {/* Badges */}
                 <div className="absolute top-3 right-3 flex gap-1">
-                  {template.isPopular && (
-                    <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">인기</span>
-                  )}
-                  {template.isNew && (
-                    <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-600">NEW</span>
-                  )}
+                  {template.isPopular && <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">인기</span>}
+                  {template.isNew && <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-600">NEW</span>}
                 </div>
 
                 {/* Title */}
-                <h3 className="text-[14px] font-bold text-slate-800 mb-1">{template.icon} {template.name}</h3>
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className="text-[16px]">{template.icon}</span>
+                  <h3 className="text-[13px] font-bold text-slate-800">{template.name}</h3>
+                </div>
                 <p className="text-[10px] text-slate-500 leading-snug mb-3">{template.description}</p>
 
-                {/* Phase flow — text only, no emoji */}
+                {/* Phase flow — numbered steps */}
                 <div className="flex items-center gap-1 flex-wrap mb-3">
                   {corePhases.map((phase, i) => (
                     <div key={phase.id} className="flex items-center gap-1">
-                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 font-medium">{phase.expertRole}</span>
+                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 font-medium flex items-center gap-1">
+                        <span className="w-3 h-3 rounded-full bg-slate-300 text-white text-[7px] font-bold flex items-center justify-center shrink-0">{i + 1}</span>
+                        {phase.expertRole}
+                      </span>
                       {i < corePhases.length - 1 && <ChevronRight className="w-2.5 h-2.5 text-slate-300 shrink-0" />}
                     </div>
                   ))}
@@ -985,7 +990,7 @@ function ExpertModePanel({ onSelectTemplate, selectedTemplate, onSubmit, isDiscu
 
                 {/* Footer */}
                 <div className="flex items-center justify-between pt-2 border-t border-slate-100">
-                  <span className="text-[9px] font-semibold text-slate-400">{template.phases.length}단계</span>
+                  <span className="text-[9px] font-semibold text-slate-400">{template.phases.length}단계 순차 상담</span>
                   <span className="text-[9px] text-slate-400 flex items-center gap-1"><FileText className="w-2.5 h-2.5" />{template.outputFormat}</span>
                 </div>
               </div>
@@ -1000,21 +1005,26 @@ function ExpertModePanel({ onSelectTemplate, selectedTemplate, onSubmit, isDiscu
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
 
           <div ref={modalRef} className="relative w-full max-w-lg max-h-[85vh] bg-white rounded-2xl shadow-2xl overflow-y-auto scrollbar-thin animate-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
-            {/* Header — clean, no gradient */}
+            {/* Header */}
             <div className="px-6 py-5 border-b border-slate-100 relative">
               <button onClick={() => onSelectTemplate(null)}
                 className="absolute top-4 right-4 w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-colors">
                 <X className="w-4 h-4 text-slate-500" />
               </button>
-              <h3 className="text-[18px] font-bold text-slate-900">{selectedTemplate.icon} {selectedTemplate.name}</h3>
-              <p className="text-[12px] text-slate-500 mt-1">{selectedTemplate.description}</p>
-              <div className="flex items-center gap-3 mt-2.5">
-                <span className="text-[10px] font-semibold text-slate-500 bg-slate-100 px-2.5 py-1 rounded">{selectedTemplate.phases.length}단계 순차 상담</span>
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-2xl">{selectedTemplate.icon}</span>
+                <h3 className="text-[18px] font-bold text-slate-900">{selectedTemplate.name}</h3>
+              </div>
+              <p className="text-[12px] text-slate-500">{selectedTemplate.description}</p>
+              <div className="flex items-center gap-3 mt-3">
+                <span className="text-[10px] font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded flex items-center gap-1">
+                  <BookOpen className="w-3 h-3" />{selectedTemplate.phases.length}단계 순차 상담
+                </span>
                 <span className="text-[10px] text-slate-400 flex items-center gap-1"><FileText className="w-3 h-3" />{selectedTemplate.outputFormat}</span>
               </div>
             </div>
 
-            {/* Phase timeline — minimal, structured */}
+            {/* Phase timeline */}
             <div className="px-6 py-5">
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-4">상담 프로세스</p>
               <div className="space-y-0">
@@ -1022,22 +1032,20 @@ function ExpertModePanel({ onSelectTemplate, selectedTemplate, onSubmit, isDiscu
                   const isLast = i === selectedTemplate.phases.length - 1;
                   return (
                     <div key={phase.id} className="flex gap-4">
-                      {/* Timeline line */}
                       <div className="flex flex-col items-center shrink-0">
-                        <div className={cn('w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold',
-                          isLast ? 'bg-slate-800 text-white' : 'bg-slate-200 text-slate-600')}>
-                          {isLast ? '✓' : i + 1}
+                        <div className={cn('w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold',
+                          isLast ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-600')}>
+                          {isLast ? <Check className="w-3.5 h-3.5" /> : i + 1}
                         </div>
                         {!isLast && <div className="w-px h-full bg-slate-200 my-1" />}
                       </div>
-                      {/* Content */}
-                      <div className="pb-4 flex-1 min-w-0">
-                        <p className={cn('text-[12px] font-semibold', isLast ? 'text-slate-800' : 'text-slate-700')}>{phase.expertRole}</p>
-                        <p className="text-[10px] text-slate-400 mt-0.5">{phase.description}</p>
+                      <div className="pb-5 flex-1 min-w-0">
+                        <p className={cn('text-[13px] font-semibold', isLast ? 'text-slate-800' : 'text-slate-700')}>{phase.expertRole}</p>
+                        <p className="text-[11px] text-slate-400 mt-0.5">{phase.description}</p>
                         {phase.sampleQuestions.length > 0 && (
-                          <div className="mt-2 space-y-1">
+                          <div className="mt-2.5 space-y-1.5">
                             {phase.sampleQuestions.map((q, qi) => (
-                              <p key={qi} className="text-[10px] text-slate-400 pl-2.5 border-l-2 border-slate-200">{q}</p>
+                              <p key={qi} className="text-[10px] text-slate-500 pl-3 border-l-2 border-slate-200 leading-relaxed">{q}</p>
                             ))}
                           </div>
                         )}
