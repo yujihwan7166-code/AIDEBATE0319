@@ -1041,55 +1041,45 @@ function ExpertModePanel({ onSelectTemplate, selectedTemplate, onSubmit, isDiscu
               </div>
             </div>
 
-            <div className="grid grid-cols-5 divide-x divide-slate-100">
-              {/* Left: Process timeline */}
-              <div className="col-span-3 px-6 py-5">
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-4">상담 프로세스</p>
-                <div className="space-y-0">
-                  {selectedTemplate.phases.map((phase, i) => {
-                    const isLast = i === selectedTemplate.phases.length - 1;
-                    return (
-                      <div key={phase.id} className="flex gap-3.5">
-                        <div className="flex flex-col items-center shrink-0">
-                          <div className={cn('w-8 h-8 rounded-lg flex items-center justify-center text-[12px] font-bold',
-                            isLast ? 'bg-slate-900 text-white shadow-sm' : 'bg-white text-slate-500 border border-slate-200 shadow-sm')}>
-                            {isLast ? <Check className="w-4 h-4" /> : i + 1}
-                          </div>
-                          {!isLast && <div className="w-px flex-1 bg-slate-200 my-1" />}
-                        </div>
-                        <div className="pb-5 flex-1 min-w-0">
-                          <p className={cn('text-[13px] font-bold', isLast ? 'text-slate-900' : 'text-slate-700')}>{phase.expertRole}</p>
-                          <p className="text-[11px] text-slate-400 mt-0.5 leading-relaxed">{phase.description}</p>
-                          {phase.sampleQuestions.length > 0 && (
-                            <div className="mt-2 space-y-1">
-                              {phase.sampleQuestions.slice(0, 2).map((q, qi) => (
-                                <p key={qi} className="text-[10px] text-slate-400 pl-3 border-l-2 border-slate-200">{q}</p>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Right: Scenario examples */}
-              <div className="col-span-2 px-5 py-5 bg-slate-50/50">
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-4">예시 상담</p>
-                <div className="space-y-2.5">
-                  {(scenarioExamples[selectedTemplate.id] || []).map((ex, i) => (
+            {/* Scenario examples */}
+            {scenarioExamples[selectedTemplate.id] && (
+              <div className="px-8 pb-5">
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">이런 상담을 할 수 있어요</p>
+                <div className="grid grid-cols-2 gap-2.5">
+                  {scenarioExamples[selectedTemplate.id].map((ex, i) => (
                     <button key={i} onClick={() => setQuestion(ex.title + ' - ' + ex.preview)}
-                      className="w-full text-left p-3.5 rounded-xl border border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm transition-all group">
+                      className="text-left p-3.5 rounded-xl border border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm transition-all group">
                       <div className="flex items-center gap-1.5 mb-1">
                         <Zap className="w-3 h-3 text-slate-300 group-hover:text-slate-500 transition-colors" />
                         <span className="text-[11px] font-bold text-slate-700">{ex.title}</span>
                       </div>
-                      <p className="text-[10px] text-slate-400 leading-relaxed line-clamp-3">{ex.preview}</p>
+                      <p className="text-[10px] text-slate-400 leading-relaxed line-clamp-2">{ex.preview}</p>
                     </button>
                   ))}
-                  <p className="text-[9px] text-slate-300 text-center mt-2">클릭하면 입력창에 자동 입력됩니다</p>
                 </div>
+              </div>
+            )}
+
+            {/* Process timeline — horizontal steps */}
+            <div className="px-8 pb-5">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">상담 프로세스</p>
+              <div className="flex items-start gap-0">
+                {selectedTemplate.phases.map((phase, i) => {
+                  const isLast = i === selectedTemplate.phases.length - 1;
+                  return (
+                    <div key={phase.id} className="flex-1 flex flex-col items-center text-center relative">
+                      {/* Connector line */}
+                      {i > 0 && <div className="absolute top-3.5 right-1/2 w-full h-px bg-slate-200 -z-0" />}
+                      {/* Step badge */}
+                      <div className={cn('w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold z-10 mb-2',
+                        isLast ? 'bg-slate-900 text-white' : 'bg-white text-slate-500 border-2 border-slate-200')}>
+                        {isLast ? <Check className="w-3 h-3" /> : i + 1}
+                      </div>
+                      <p className={cn('text-[10px] font-bold leading-tight', isLast ? 'text-slate-800' : 'text-slate-600')}>{phase.expertRole}</p>
+                      <p className="text-[8px] text-slate-400 mt-0.5 leading-snug px-1">{phase.description}</p>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
