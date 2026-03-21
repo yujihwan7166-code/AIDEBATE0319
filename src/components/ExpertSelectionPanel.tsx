@@ -902,60 +902,60 @@ function ExpertModePanel({ onSelectTemplate, selectedTemplate, onSubmit, isDiscu
               className={cn(
                 'relative text-left rounded-2xl border transition-all duration-200 group overflow-hidden',
                 isSelected
-                  ? 'border-slate-700 bg-slate-900 shadow-xl ring-1 ring-slate-600'
+                  ? 'border-indigo-300 bg-indigo-50/80 shadow-lg ring-1 ring-indigo-200'
                   : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-lg'
               )}
             >
               {/* Top gradient accent bar */}
-              <div className={cn('h-1', isSelected ? 'bg-gradient-to-r from-amber-400 to-orange-400' : `bg-gradient-to-r ${template.gradient}`)} />
+              <div className={cn('h-1', `bg-gradient-to-r ${template.gradient}`)} />
 
               <div className="px-4 pt-3.5 pb-3">
                 {/* Badges */}
                 <div className="absolute top-3 right-3 flex gap-1">
                   {template.isPopular && (
-                    <span className={cn('text-[8px] font-bold px-1.5 py-0.5 rounded-full', isSelected ? 'bg-amber-400/20 text-amber-300' : 'bg-amber-50 text-amber-600 border border-amber-200')}>인기</span>
+                    <span className="text-[8px] font-bold px-1.5 py-0.5 rounded-full bg-amber-50 text-amber-600 border border-amber-200">인기</span>
                   )}
                   {template.isNew && (
-                    <span className={cn('text-[8px] font-bold px-1.5 py-0.5 rounded-full', isSelected ? 'bg-emerald-400/20 text-emerald-300' : 'bg-emerald-50 text-emerald-600 border border-emerald-200')}>NEW</span>
+                    <span className="text-[8px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200">NEW</span>
                   )}
                 </div>
 
                 {/* Header: Icon + Title */}
                 <div className="flex items-start gap-2.5 mb-2.5">
-                  <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center text-xl shrink-0 shadow-sm', isSelected ? 'bg-white/10' : `bg-gradient-to-br ${template.gradient}`)}>
+                  <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center text-xl shrink-0 shadow-sm', `bg-gradient-to-br ${template.gradient}`)}>
                     {template.icon}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <h3 className={cn('text-[13px] font-bold leading-tight', isSelected ? 'text-white' : 'text-slate-800')}>{template.name}</h3>
-                    <p className={cn('text-[9px] mt-0.5 leading-snug', isSelected ? 'text-slate-400' : 'text-slate-500')}>{template.description}</p>
+                    <h3 className={cn('text-[13px] font-bold leading-tight', isSelected ? 'text-indigo-900' : 'text-slate-800')}>{template.name}</h3>
+                    <p className="text-[9px] mt-0.5 leading-snug text-slate-500">{template.description}</p>
                   </div>
                 </div>
 
                 {/* Phase flow: expert roles */}
-                <div className={cn('rounded-lg p-2 mb-2.5', isSelected ? 'bg-white/5' : 'bg-slate-50')}>
+                <div className={cn('rounded-lg p-2 mb-2.5', isSelected ? 'bg-indigo-100/50' : 'bg-slate-50')}>
                   <div className="flex items-center gap-0.5 flex-wrap">
                     {corePhases.map((phase, i) => (
                       <div key={phase.id} className="flex items-center gap-0.5">
                         <span className={cn('text-[9px] px-1.5 py-0.5 rounded-md font-medium inline-flex items-center gap-0.5',
-                          isSelected ? 'bg-white/10 text-slate-300' : 'bg-white text-slate-600 border border-slate-200')}>
+                          isSelected ? 'bg-white text-indigo-700 border border-indigo-200' : 'bg-white text-slate-600 border border-slate-200')}>
                           <span>{phase.expertIcon}</span>
                           <span>{phase.expertRole}</span>
                         </span>
-                        {i < corePhases.length - 1 && <ChevronRight className={cn('w-2.5 h-2.5 shrink-0', isSelected ? 'text-slate-500' : 'text-slate-300')} />}
+                        {i < corePhases.length - 1 && <ChevronRight className="w-2.5 h-2.5 shrink-0 text-slate-300" />}
                       </div>
                     ))}
                   </div>
                 </div>
 
                 {/* Output format */}
-                <div className={cn('flex items-center gap-1.5 text-[9px] font-medium', isSelected ? 'text-slate-500' : 'text-slate-400')}>
+                <div className="flex items-center gap-1.5 text-[9px] font-medium text-slate-400">
                   <FileText className="w-3 h-3 shrink-0" />
                   <span>{template.outputFormat}</span>
                 </div>
 
                 {/* Phase count badge */}
-                <div className={cn('mt-2 pt-2 border-t', isSelected ? 'border-slate-700' : 'border-slate-100')}>
-                  <span className={cn('text-[9px] font-bold', isSelected ? 'text-amber-400' : 'text-slate-500')}>
+                <div className={cn('mt-2 pt-2 border-t', isSelected ? 'border-indigo-200' : 'border-slate-100')}>
+                  <span className={cn('text-[9px] font-bold', isSelected ? 'text-indigo-500' : 'text-slate-500')}>
                     {template.phases.length}단계 전문가 순차 상담
                   </span>
                 </div>
